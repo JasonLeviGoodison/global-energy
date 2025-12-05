@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Organization {
+  id        String          @id @default(uuid())
+  clerkId   String          @unique
+  name      String
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  apiKeys   ApiKey[]
+  models    DeployedModel[]
+}
+
+model ApiKey {
+  id             String       @id @default(uuid())
+  key            String       @unique
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  createdAt      DateTime     @default(now())
+  isActive       Boolean      @default(true)
+  usage          ApiUsage[]
+}
+
+model DeployedModel {
+  id              String       @id @default(uuid())
+  name            String
+  provider        String // "bedrock" | "crusoe" | "other"
+  providerModelId String
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id])
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  usage           ApiUsage[]
+}
+
+model ApiUsage {
+  id              String        @id @default(uuid())
+  apiKeyId        String
+  apiKey          ApiKey        @relation(fields: [apiKeyId], references: [id])
+  deployedModelId String
+  deployedModel   DeployedModel @relation(fields: [deployedModelId], references: [id])
+  tokensUsed      Int
+  timestamp       DateTime      @default(now())
+}

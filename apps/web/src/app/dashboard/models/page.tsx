@@ -1,0 +1,285 @@
+"use client";
+
+import { useState } from "react";
+import { Plus, Server } from "lucide-react";
+import { createButton, createText, createGlassCard, badgeStyles } from "@/lib/designSystem";
+import { generateCodeSnippet } from "@/lib/codeSnippets";
+import { Modal, Input, Select, Button, CodeBlock } from "@/components";
+import { useModels, useModelCatalog, useDeployModel } from "@/hooks";
+import type { DeployedModel, ModelCatalog } from "@/types";
+
+export default function ModelsPage() {
+  const { data: models = [], isLoading: modelsLoading } = useModels();
+  const { data: catalog } = useModelCatalog();
+  const deployModel = useDeployModel();
+
+  const [showDeployModal, setShowDeployModal] = useState(false);
+  const [selectedModel, setSelectedModel] = useState<DeployedModel | null>(null);
+  const [selectedLanguage, setSelectedLanguage] = useState<"javascript" | "go" | "bash">(
+    "javascript"
+  );
+  const [newModelName, setNewModelName] = useState("");
+  const [newModelProvider, setNewModelProvider] = useState("bedrock");
+  const [newModelId, setNewModelId] = useState("");
+
+  const handleModelSelect = (modelId: string) => {
+    setNewModelId(modelId);
+    const allModels = [...(catalog?.bedrock || []), ...(catalog?.crusoe || [])];
+    const selectedModelInfo = allModels.find((m) => m.id === modelId);
+    if (selectedModelInfo && !newModelName) {
+      setNewModelName(selectedModelInfo.name);
+    }
+  };
+
+  const handleDeploy = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await deployModel.mutateAsync({
+      name: newModelName,
+      provider: newModelProvider,
+      providerModelId: newModelId,
+    });
+    setShowDeployModal(false);
+    setNewModelName("");
+    setNewModelId("");
+  };
+
+  const getCodeSnippet = (model: DeployedModel, language: "javascript" | "go" | "bash") => {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+    return generateCodeSnippet(language, {
+      modelId: model.id,
+      apiUrl,
+    });
+  };
+
+  if (modelsLoading)
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className={createText("body", "text-lg")}>Loading...</div>
+      </div>
+    );
+
+  return (
+    <div className="min-h-screen p-8">
+      <div className="mb-8">
+        <h2 className={createText("eyebrow", "mb-2")}>INFRASTRUCTURE</h2>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className={createText("heading", "text-4xl mb-2")}>Managed Inference</h1>
+            <p className={createText("bodyMuted", "text-lg")}>
+              Manage your AI model deployments across providers
+            </p>
+          </div>
+          <Button
+            variant="primary"
+            onClick={() => setShowDeployModal(true)}
+            className="flex items-center gap-2 px-6 py-3"
+          >
+            <Plus size={18} />
+            Deploy New Model
+          </Button>
+        </div>
+      </div>
+
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {models.map((model) => (
+          <div
+            key={model.id}
+            className={createGlassCard(
+              "card",
+              "p-6 glass-reflection transition-all hover:scale-[1.02] cursor-pointer"
+            )}
+            onClick={() => setSelectedModel(model)}
+          >
+            <div className="mb-4 flex items-center justify-between">
+              <h4 className={createText("heading", "text-lg")}>{model.name}</h4>
+              <span className={badgeStyles.success}>Active</span>
+            </div>
+            <div className="space-y-3 text-sm">
+              <div>
+                <span className={createText("bodyMuted", "text-xs uppercase tracking-wider")}>
+                  Provider
+                </span>
+                <p className={createText("body", "mt-1")}>{model.provider}</p>
+              </div>
+              <div>
+                <span className={createText("bodyMuted", "text-xs uppercase tracking-wider")}>
+                  Model ID
+                </span>
+                <p className={createText("body", "mt-1 font-mono text-xs break-all")}>
+                  {model.providerModelId}
+                </p>
+              </div>
+              <div>
+                <span className={createText("bodyMuted", "text-xs uppercase tracking-wider")}>
+                  Deployed
+                </span>
+                <p className={createText("body", "mt-1")}>
+                  {new Date(model.createdAt).toLocaleDateString()}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
+        {models.length === 0 && (
+          <div
+            className={createGlassCard(
+              "card",
+              "col-span-full flex flex-col items-center justify-center py-16 border-2 border-dashed border-white/20"
+            )}
+          >
+            <Server size={56} className="mb-4 text-white/20" />
+            <p className={createText("bodyMuted")}>No models deployed yet.</p>
+          </div>
+        )}
+      </div>
+
+      <Modal isOpen={showDeployModal} onClose={() => setShowDeployModal(false)}>
+        <h3 className={createText("heading", "mb-6 text-2xl")}>Deploy New Model</h3>
+        <form onSubmit={handleDeploy} className="space-y-6">
+          <Select
+            label="Provider"
+            value={newModelProvider}
+            onChange={(e) => {
+              setNewModelProvider(e.target.value);
+              setNewModelId("");
+              setNewModelName("");
+            }}
+          >
+            <option value="bedrock" className="bg-slate-800">
+              AWS Bedrock
+            </option>
+            <option value="crusoe" className="bg-slate-800">
+              Crusoe Cloud
+            </option>
+          </Select>
+
+          <Select
+            label="Model"
+            value={newModelId}
+            onChange={(e) => handleModelSelect(e.target.value)}
+            required
+          >
+            <option value="" className="bg-slate-800">
+              Select a model...
+            </option>
+            {catalog &&
+              catalog[newModelProvider as keyof ModelCatalog]?.map((model) => (
+                <option key={model.id} value={model.id} className="bg-slate-800">
+                  {model.name} - {model.provider} ({model.contextLength.toLocaleString()} tokens)
+                </option>
+              ))}
+          </Select>
+
+          {newModelId && (
+            <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+              <p className={createText("bodyMuted", "text-xs mb-2")}>Model Details</p>
+              <p className={createText("body", "text-sm")}>
+                {
+                  catalog?.[newModelProvider as keyof ModelCatalog]?.find(
+                    (m) => m.id === newModelId
+                  )?.description
+                }
+              </p>
+            </div>
+          )}
+
+          <Input
+            label="Deployment Name"
+            placeholder="My Production Model"
+            value={newModelName}
+            onChange={(e) => setNewModelName(e.target.value)}
+            helperText="Give this deployment a friendly name for easy identification"
+            required
+          />
+          <div className="flex justify-end gap-3 mt-8">
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => setShowDeployModal(false)}
+              className="px-6 py-3"
+            >
+              Cancel
+            </Button>
+            <Button type="submit" variant="primary" className="px-6 py-3">
+              Deploy
+            </Button>
+          </div>
+        </form>
+      </Modal>
+
+      <Modal
+        isOpen={!!selectedModel}
+        onClose={() => {
+          setSelectedModel(null);
+          setSelectedLanguage("javascript");
+        }}
+        className="max-w-3xl"
+      >
+        {selectedModel && (
+          <div>
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className={createText("heading", "text-2xl")}>{selectedModel.name}</h3>
+                <span className={badgeStyles.success}>Active</span>
+              </div>
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div>
+                  <span className={createText("bodyMuted", "text-xs uppercase tracking-wider")}>
+                    Provider
+                  </span>
+                  <p className={createText("body", "mt-1")}>{selectedModel.provider}</p>
+                </div>
+                <div>
+                  <span className={createText("bodyMuted", "text-xs uppercase tracking-wider")}>
+                    Deployed
+                  </span>
+                  <p className={createText("body", "mt-1")}>
+                    {new Date(selectedModel.createdAt).toLocaleDateString()}
+                  </p>
+                </div>
+              </div>
+              <div>
+                <span className={createText("bodyMuted", "text-xs uppercase tracking-wider")}>
+                  Model ID
+                </span>
+                <p className={createText("body", "mt-1 font-mono text-xs")}>
+                  {selectedModel.providerModelId}
+                </p>
+              </div>
+            </div>
+
+            <div className="border-t border-white/10 pt-6">
+              <p className={createText("eyebrow", "text-xs mb-4")}>IMPLEMENTATION CODE</p>
+
+              <CodeBlock
+                code={getCodeSnippet(selectedModel, selectedLanguage) || ""}
+                language={selectedLanguage}
+                onLanguageChange={setSelectedLanguage}
+              />
+
+              <div className="mt-6 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+                <p className={createText("body", "text-sm text-emerald-400")}>
+                  <strong>Note:</strong> Replace YOUR_API_KEY with your actual API key. You can
+                  create one in the API Keys section.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex justify-end mt-8">
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setSelectedModel(null);
+                  setSelectedLanguage("javascript");
+                }}
+                className="px-6 py-3"
+              >
+                Close
+              </Button>
+            </div>
+          </div>
+        )}
+      </Modal>
+    </div>
+  );
+}

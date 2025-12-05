@@ -15,6 +15,13 @@
       "when": 1764601689379,
       "tag": "0001_short_vulture",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1764959718724,
+      "tag": "0002_woozy_bulldozer",
+      "breakpoints": true
     }
   ]
 }

@@ -7,9 +7,10 @@ import type { UsageStats, TimeSeriesData, OverviewStats } from "../types/analyti
 export type ApiUsage = typeof apiUsage.$inferSelect;
 export type NewApiUsage = typeof apiUsage.$inferInsert;
 
-export class ApiUsageRepository extends BaseRepository<ApiUsage> {
-  protected table = apiUsage;
-  protected tableName = "apiUsage";
+export class ApiUsageRepository extends BaseRepository<typeof apiUsage> {
+  constructor() {
+    super(apiUsage);
+  }
 
   async getUsageByOrganization(organizationId: string): Promise<UsageStats[]> {
     const usage = await db

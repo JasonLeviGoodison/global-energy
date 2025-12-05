@@ -6,15 +6,14 @@ import { eq } from "drizzle-orm";
 export type Organization = typeof organizations.$inferSelect;
 export type NewOrganization = typeof organizations.$inferInsert;
 
-export class OrganizationRepository extends BaseRepository<Organization> {
-  protected table = organizations;
-  protected tableName = "organizations";
+export class OrganizationRepository extends BaseRepository<typeof organizations> {
+  constructor() {
+    super(organizations);
+  }
 
-  async findByClerkId(clerkId: string): Promise<Organization | undefined> {
+  async findByExternalId(externalId: string): Promise<Organization | undefined> {
     return await db.query.organizations.findFirst({
-      where: eq(organizations.clerkId, clerkId)
+      where: eq(organizations.externalId, externalId),
     });
   }
 }
-
-

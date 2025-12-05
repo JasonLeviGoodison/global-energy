@@ -3,16 +3,16 @@ import { OrganizationRepository, NewOrganization } from "../repositories/Organiz
 export class OrganizationService {
   private repo = new OrganizationRepository();
 
-  async getOrCreateByClerkId(clerkId: string, defaultName: string = "My Organization") {
-    let org = await this.repo.findByClerkId(clerkId);
-    
+  async getOrCreateByExternalUserId(externalId: string, defaultName: string = "My Organization") {
+    let org = await this.repo.findByExternalId(externalId);
+
     if (!org) {
       org = await this.repo.create({
-        clerkId,
+        externalId,
         name: defaultName,
       });
     }
-    
+
     return org;
   }
 
@@ -20,5 +20,3 @@ export class OrganizationService {
     return await this.repo.findById(id);
   }
 }
-
-

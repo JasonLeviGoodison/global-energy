@@ -14,7 +14,7 @@ export class AnalyticsController {
     }
 
     try {
-      const org = await this.orgService.getOrCreateByClerkId(userId);
+      const org = await this.orgService.getOrCreateByExternalUserId(userId);
       const analytics = await this.service.getAnalyticsByOrganization(org.id);
       res.json(analytics);
     } catch (e) {
@@ -30,7 +30,7 @@ export class AnalyticsController {
     }
 
     try {
-      const org = await this.orgService.getOrCreateByClerkId(userId);
+      const org = await this.orgService.getOrCreateByExternalUserId(userId);
       const days = parseInt(req.query.days as string) || 30;
       const analytics = await this.service.getOverviewAnalytics(org.id, days);
       res.json(analytics);

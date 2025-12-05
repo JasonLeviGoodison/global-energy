@@ -14,7 +14,7 @@ export class ApiKeyController {
     }
 
     try {
-      const org = await this.orgService.getOrCreateByClerkId(userId);
+      const org = await this.orgService.getOrCreateByExternalUserId(userId);
       const keys = await this.service.getByOrganizationId(org.id);
       res.json(keys);
     } catch (e) {
@@ -30,7 +30,7 @@ export class ApiKeyController {
     }
 
     try {
-      const org = await this.orgService.getOrCreateByClerkId(userId);
+      const org = await this.orgService.getOrCreateByExternalUserId(userId);
       const newKey = await this.service.createForOrganization(org.id);
       res.json(newKey);
     } catch (e) {

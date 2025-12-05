@@ -3,7 +3,7 @@ import { relations } from "drizzle-orm";
 
 export const organizations = pgTable("organizations", {
   id: uuid("id").primaryKey().defaultRandom(),
-  clerkId: text("clerk_id").notNull().unique(),
+  externalId: text("external_id").notNull().unique(),
   name: text("name").notNull(),
   createdAt: timestamp("created_at", { precision: 3, mode: "date" }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { precision: 3, mode: "date" }).notNull().defaultNow(),

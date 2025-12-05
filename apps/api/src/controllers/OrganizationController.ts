@@ -12,7 +12,7 @@ export class OrganizationController {
     }
 
     try {
-      const org = await this.service.getOrCreateByClerkId(userId);
+      const org = await this.service.getOrCreateByExternalUserId(userId);
       res.json(org);
     } catch (e) {
       console.error(e);

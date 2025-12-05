@@ -21,7 +21,7 @@ export class DeployedModelController {
     }
 
     try {
-      const org = await this.orgService.getOrCreateByClerkId(userId);
+      const org = await this.orgService.getOrCreateByExternalUserId(userId);
       const models = await this.service.getByOrganizationId(org.id);
       res.json(models);
     } catch (e) {
@@ -38,7 +38,7 @@ export class DeployedModelController {
 
     try {
       const body = createModelSchema.parse(req.body);
-      const org = await this.orgService.getOrCreateByClerkId(userId);
+      const org = await this.orgService.getOrCreateByExternalUserId(userId);
 
       const model = await this.service.create({
         name: body.name,

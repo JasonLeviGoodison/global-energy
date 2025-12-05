@@ -1,44 +1,62 @@
 import { db } from "../db";
-import { SQL } from "drizzle-orm";
+import { SQL, eq } from "drizzle-orm";
+import { BaseRepositoryTable } from "../db/types";
+import { PgTable } from "drizzle-orm/pg-core";
 
-export abstract class BaseRepository<T> {
-  protected abstract table: any;
-  protected abstract tableName: string;
+export class BaseRepository<T extends BaseRepositoryTable> {
+  protected db = db;
 
-  async findById(id: string): Promise<T | undefined> {
-    return await db.query[this.tableName].findFirst({
-      where: (table: any, { eq }: any) => eq(table.id, id)
-    });
+  constructor(readonly table: T) {}
+
+  async findById(id: T["$inferSelect"]["id"]): Promise<T["$inferSelect"] | undefined> {
+    const [result] = await this.db
+      .select()
+      .from(this.table as PgTable)
+      .where(eq(this.table.id, id))
+      .limit(1);
+    return result as T["$inferSelect"] | undefined;
   }
 
-  async findMany(where?: SQL): Promise<T[]> {
+  async findMany(where?: SQL): Promise<T["$inferSelect"][]> {
     if (where) {
-      return await db.query[this.tableName].findMany({ where });
+      return (await this.db
+        .select()
+        .from(this.table as PgTable)
+        .where(where)) as T["$inferSelect"][];
     }
-    return await db.query[this.tableName].findMany();
+    return (await this.db.select().from(this.table as PgTable)) as T["$inferSelect"][];
   }
 
-  async findFirst(where: SQL): Promise<T | undefined> {
-    return await db.query[this.tableName].findFirst({ where });
+  async findFirst(where: SQL): Promise<T["$inferSelect"] | undefined> {
+    const [result] = await this.db
+      .select()
+      .from(this.table as PgTable)
+      .where(where)
+      .limit(1);
+    return result as T["$inferSelect"] | undefined;
   }
 
-  async create(data: any): Promise<T> {
-    const [result] = await db.insert(this.table).values(data).returning();
-    return result as T;
-  }
-
-  async update(id: string, data: any): Promise<T> {
-    const [result] = await db.update(this.table)
-      .set(data)
-      .where((table: any, { eq }: any) => eq(table.id, id))
+  async create(data: T["$inferInsert"]): Promise<T["$inferSelect"]> {
+    const [result] = await this.db
+      .insert(this.table as PgTable)
+      .values(data)
       .returning();
-    return result as T;
+    return result as T["$inferSelect"];
   }
 
-  async delete(id: string): Promise<void> {
-    await db.delete(this.table)
-      .where((table: any, { eq }: any) => eq(table.id, id));
+  async update(
+    id: T["$inferSelect"]["id"],
+    data: Partial<T["$inferInsert"]>
+  ): Promise<T["$inferSelect"]> {
+    const [result] = await this.db
+      .update(this.table as PgTable)
+      .set(data)
+      .where(eq(this.table.id, id))
+      .returning();
+    return result as T["$inferSelect"];
+  }
+
+  async delete(id: T["$inferSelect"]["id"]): Promise<void> {
+    await this.db.delete(this.table as PgTable).where(eq(this.table.id, id));
   }
 }
-
-

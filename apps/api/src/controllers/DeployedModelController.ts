@@ -49,7 +49,13 @@ export class DeployedModelController {
 
       res.json(model);
     } catch (e) {
-      console.error(e);
+      console.error("Error deploying model:", e);
+      if (e instanceof z.ZodError) {
+        return res.status(400).json({
+          error: "Invalid request data",
+          details: e.errors,
+        });
+      }
       res.status(500).json({ error: "Failed to deploy model" });
     }
   };

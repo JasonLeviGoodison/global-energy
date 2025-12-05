@@ -16,6 +16,12 @@ export class ApiClient {
   }
 
   private async fetchWithAuth(path: string, options: RequestInit = {}) {
+    console.log("Making API request:", {
+      path,
+      method: options.method || "GET",
+      hasToken: !!this.token,
+    });
+
     const headers: HeadersInit = {
       "Content-Type": "application/json",
       ...(this.token ? { Authorization: `Bearer ${this.token}` } : {}),
@@ -28,8 +34,17 @@ export class ApiClient {
     });
 
     if (!res.ok) {
-      const error = await res.json().catch(() => ({ error: "Unknown error" }));
-      throw new Error(error.error || `Request failed with status ${res.status}`);
+      const errorData = await res.json().catch(() => null);
+      const errorMessage =
+        errorData?.error || errorData?.message || `Request failed with status ${res.status}`;
+      console.error("API Error:", {
+        status: res.status,
+        statusText: res.statusText,
+        path,
+        errorData,
+        body: options.body,
+      });
+      throw new Error(errorMessage);
     }
 
     return res.json();

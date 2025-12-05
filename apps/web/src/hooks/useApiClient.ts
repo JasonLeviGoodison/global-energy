@@ -8,12 +8,7 @@ export function useApiClient() {
   const { getToken } = useAuth();
 
   useEffect(() => {
-    const updateToken = async () => {
-      const token = await getToken();
-      apiClient.setToken(token);
-    };
-
-    updateToken();
+    apiClient.setTokenGetter(getToken);
   }, [getToken]);
 
   return apiClient;

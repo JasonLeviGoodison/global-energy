@@ -1,30 +1,26 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
-export interface ApiClientConfig {
-  token?: string | null;
-}
+type TokenGetter = () => Promise<string | null>;
 
 export class ApiClient {
-  private token?: string | null;
+  private tokenGetter?: TokenGetter;
 
-  constructor(config?: ApiClientConfig) {
-    this.token = config?.token;
-  }
-
-  setToken(token: string | null) {
-    this.token = token;
+  setTokenGetter(getter: TokenGetter) {
+    this.tokenGetter = getter;
   }
 
   private async fetchWithAuth(path: string, options: RequestInit = {}) {
+    const token = this.tokenGetter ? await this.tokenGetter() : null;
+
     console.log("Making API request:", {
       path,
       method: options.method || "GET",
-      hasToken: !!this.token,
+      hasToken: !!token,
     });
 
     const headers: HeadersInit = {
       "Content-Type": "application/json",
-      ...(this.token ? { Authorization: `Bearer ${this.token}` } : {}),
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...options.headers,
     };
 

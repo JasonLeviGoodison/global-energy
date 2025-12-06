@@ -2,7 +2,7 @@ import { pgTable, text } from "drizzle-orm/pg-core";
 import { baseFields, foreignKeyRelationId, BaseId } from "../utils";
 import { organizations } from "./organizations";
 
-export type DeployedModelId = BaseId<"deployed_models">;
+export type DeployedModelId = BaseId<"deployed_model">;
 
 export const deployedModels = pgTable("deployed_model", {
   ...baseFields<"deployed_model">(),

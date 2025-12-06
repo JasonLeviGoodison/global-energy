@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Global AI",
+  title: "General Compute",
   description: "Manage your AI models and API keys",
 };
 

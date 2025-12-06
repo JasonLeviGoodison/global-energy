@@ -2,6 +2,7 @@
 
 import { ReactNode, useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { UserButton, useUser } from "@clerk/nextjs";
 import { Server, Key, BarChart3, ChevronLeft, ChevronRight, Network, Box } from "lucide-react";
@@ -49,9 +50,6 @@ export function Sidebar({ children }: { children: ReactNode }) {
         </button>
 
         <div className="flex items-center gap-3 p-6 border-b border-white/10">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-500 flex-shrink-0">
-            <span className="font-bold text-white text-lg">N</span>
-          </div>
           <AnimatePresence>
             {isExpanded && (
               <motion.span
@@ -59,9 +57,12 @@ export function Sidebar({ children }: { children: ReactNode }) {
                 animate={{ opacity: 1, width: "auto" }}
                 exit={{ opacity: 0, width: 0 }}
                 transition={{ duration: 0.2 }}
-                className={createText("heading", "text-lg whitespace-nowrap overflow-hidden")}
+                className={createText(
+                  "heading",
+                  "text-base whitespace-nowrap overflow-hidden ml-2"
+                )}
               >
-                Global AI
+                General Compute
               </motion.span>
             )}
           </AnimatePresence>

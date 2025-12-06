@@ -120,8 +120,8 @@ export default function AnalyticsPage() {
         <h2 className={createText("eyebrow", "mb-2")}>INSIGHTS</h2>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className={createText("heading", "text-4xl mb-2")}>Usage Analytics</h1>
-            <p className={createText("bodyMuted", "text-lg")}>
+            <h1 className={createText("heading", "text-2xl mb-2")}>Usage Analytics</h1>
+            <p className={createText("bodyMuted", "text-sm")}>
               Track token usage and requests across your deployed models
             </p>
           </div>
@@ -131,16 +131,16 @@ export default function AnalyticsPage() {
               onChange={(e) => setDateRange(parseInt(e.target.value))}
               className="w-32"
             >
-              <option value="7" className="bg-slate-800">
+              <option value="7" className="bg-white text-slate-900">
                 Last 7 days
               </option>
-              <option value="30" className="bg-slate-800">
+              <option value="30" className="bg-white text-slate-900">
                 Last 30 days
               </option>
-              <option value="60" className="bg-slate-800">
+              <option value="60" className="bg-white text-slate-900">
                 Last 60 days
               </option>
-              <option value="90" className="bg-slate-800">
+              <option value="90" className="bg-white text-slate-900">
                 Last 90 days
               </option>
             </Select>
@@ -149,11 +149,11 @@ export default function AnalyticsPage() {
               onChange={(e) => setSelectedModelId(e.target.value)}
               className="w-48"
             >
-              <option value="all" className="bg-slate-800">
+              <option value="all" className="bg-white text-slate-900">
                 All Models
               </option>
               {overviewData.modelBreakdown.map((model) => (
-                <option key={model.modelId} value={model.modelId} className="bg-slate-800">
+                <option key={model.modelId} value={model.modelId} className="bg-white text-slate-900">
                   {model.modelName}
                 </option>
               ))}
@@ -165,8 +165,8 @@ export default function AnalyticsPage() {
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
         <div className={createGlassCard("card", "p-6")}>
           <div className="flex items-center justify-between mb-4">
-            <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-              <Activity size={24} className="text-emerald-400" />
+            <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-100">
+              <Activity size={24} className="text-emerald-600" />
             </div>
             <span className={badgeStyles.default}>
               {selectedModelId === "all" ? "Total" : "Model"}
@@ -180,8 +180,8 @@ export default function AnalyticsPage() {
 
         <div className={createGlassCard("card", "p-6")}>
           <div className="flex items-center justify-between mb-4">
-            <div className="p-3 rounded-xl bg-cyan-500/10 border border-cyan-500/20">
-              <TrendingUp size={24} className="text-cyan-400" />
+            <div className="p-3 rounded-xl bg-cyan-50 border border-cyan-100">
+              <TrendingUp size={24} className="text-cyan-600" />
             </div>
             <span className={badgeStyles.default}>
               {selectedModelId === "all" ? "Total" : "Model"}
@@ -195,8 +195,8 @@ export default function AnalyticsPage() {
 
         <div className={createGlassCard("card", "p-6")}>
           <div className="flex items-center justify-between mb-4">
-            <div className="p-3 rounded-xl bg-purple-500/10 border border-purple-500/20">
-              <Zap size={24} className="text-purple-400" />
+            <div className="p-3 rounded-xl bg-purple-50 border border-purple-100">
+              <Zap size={24} className="text-purple-600" />
             </div>
             <span className={badgeStyles.default}>Average</span>
           </div>
@@ -208,8 +208,8 @@ export default function AnalyticsPage() {
 
         <div className={createGlassCard("card", "p-6")}>
           <div className="flex items-center justify-between mb-4">
-            <div className="p-3 rounded-xl bg-orange-500/10 border border-orange-500/20">
-              <Layers size={24} className="text-orange-400" />
+            <div className="p-3 rounded-xl bg-orange-50 border border-orange-100">
+              <Layers size={24} className="text-orange-600" />
             </div>
             <span className={badgeStyles.default}>Active</span>
           </div>
@@ -230,18 +230,18 @@ export default function AnalyticsPage() {
                     <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                 <XAxis
                   dataKey="date"
-                  stroke="rgba(255,255,255,0.6)"
+                  stroke="#64748b"
                   style={{ fontSize: "12px" }}
-                  tick={{ fill: "rgba(255,255,255,0.8)" }}
+                  tick={{ fill: "#64748b" }}
                   tickFormatter={formatDate}
                 />
                 <YAxis
-                  stroke="rgba(255,255,255,0.6)"
+                  stroke="#64748b"
                   style={{ fontSize: "12px" }}
-                  tick={{ fill: "rgba(255,255,255,0.8)" }}
+                  tick={{ fill: "#64748b" }}
                   tickFormatter={formatNumber}
                 />
                 <Tooltip content={<ChartTooltip />} />
@@ -270,18 +270,18 @@ export default function AnalyticsPage() {
                     <stop offset="95%" stopColor="#06b6d4" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                 <XAxis
                   dataKey="date"
-                  stroke="rgba(255,255,255,0.6)"
+                  stroke="#64748b"
                   style={{ fontSize: "12px" }}
-                  tick={{ fill: "rgba(255,255,255,0.8)" }}
+                  tick={{ fill: "#64748b" }}
                   tickFormatter={formatDate}
                 />
                 <YAxis
-                  stroke="rgba(255,255,255,0.6)"
+                  stroke="#64748b"
                   style={{ fontSize: "12px" }}
-                  tick={{ fill: "rgba(255,255,255,0.8)" }}
+                  tick={{ fill: "#64748b" }}
                   tickFormatter={formatNumber}
                 />
                 <Tooltip content={<ChartTooltip />} />
@@ -307,7 +307,7 @@ export default function AnalyticsPage() {
             {overviewData.modelBreakdown.map((model) => (
               <div
                 key={model.modelId}
-                className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors cursor-pointer"
+                className="p-4 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer"
                 onClick={() => setSelectedModelId(model.modelId)}
               >
                 <div className="flex items-center justify-between mb-3">

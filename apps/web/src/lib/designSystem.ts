@@ -6,94 +6,133 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const glassStyles = {
-  standard: cn("bg-white/5", "border border-white/10", "backdrop-blur-md", "rounded-3xl"),
+  standard: cn(
+    "bg-slate-50/80",
+    "border border-slate-200/60",
+    "backdrop-blur-xl",
+    "rounded-xl",
+    "shadow-sm",
+    "text-slate-900"
+  ),
 
-  highBlur: cn("bg-white/5", "border border-white/10", "backdrop-blur-[40px]", "rounded-3xl"),
+  highBlur: cn(
+    "bg-slate-50/90",
+    "border border-slate-200/60",
+    "backdrop-blur-xl",
+    "rounded-xl",
+    "shadow-md",
+    "text-slate-900"
+  ),
 
   accent: cn(
-    "bg-gradient-to-br from-emerald-500/30 via-emerald-400/20 to-cyan-500/20",
-    "border border-emerald-400/30",
-    "backdrop-blur-md",
-    "rounded-3xl"
+    "bg-indigo-50/80",
+    "border border-indigo-200/50",
+    "backdrop-blur-xl",
+    "rounded-xl",
+    "shadow-sm",
+    "text-slate-900"
   ),
 
-  card: cn("bg-white/5", "border border-white/10", "backdrop-blur-md", "rounded-2xl"),
+  card: cn(
+    "bg-slate-50/60",
+    "border border-slate-200/60",
+    "backdrop-blur-lg",
+    "rounded-lg",
+    "shadow-sm",
+    "text-slate-900"
+  ),
 
   input: cn(
-    "bg-white/10",
-    "border border-white/20",
+    "bg-white",
+    "border border-slate-300",
     "backdrop-blur-sm",
-    "rounded-2xl",
-    "text-white",
-    "placeholder:text-white/40"
+    "rounded-lg",
+    "text-slate-900",
+    "placeholder:text-slate-400",
+    "focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500",
+    "shadow-sm"
   ),
 
-  modal: cn("bg-white/5", "border border-white/10", "backdrop-blur-[40px]", "rounded-3xl"),
+  modal: cn(
+    "bg-white/95",
+    "border border-slate-200",
+    "backdrop-blur-2xl",
+    "rounded-xl",
+    "shadow-2xl",
+    "text-slate-900"
+  ),
 };
 
 export const buttonStyles = {
   primary: cn(
-    "bg-white",
-    "text-black",
+    "bg-indigo-600",
+    "text-white",
     "font-semibold",
-    "rounded-2xl",
+    "rounded-lg",
     "transition-all duration-200",
-    "hover:bg-white/90",
-    "active:scale-95"
+    "hover:bg-indigo-700",
+    "active:scale-95",
+    "shadow-sm",
+    "hover:shadow-md"
   ),
 
   secondary: cn(
-    "bg-white/10",
-    "border border-white/20",
-    "text-white",
+    "bg-white",
+    "border border-slate-200",
+    "text-slate-700",
     "font-medium",
-    "rounded-2xl",
+    "rounded-lg",
     "backdrop-blur-sm",
     "transition-all duration-200",
-    "hover:bg-white/15",
-    "active:scale-95"
+    "hover:bg-slate-50",
+    "hover:border-slate-300",
+    "active:scale-95",
+    "shadow-sm"
   ),
 
   accent: cn(
-    "bg-gradient-to-br from-emerald-500/70 via-emerald-400/60 to-cyan-500/60",
+    "bg-blue-600",
     "text-white",
     "font-semibold",
-    "rounded-2xl",
+    "rounded-lg",
     "transition-all duration-200",
-    "hover:from-emerald-500/80 hover:via-emerald-400/70 hover:to-cyan-500/70",
-    "active:scale-95"
+    "hover:bg-blue-700",
+    "active:scale-95",
+    "shadow-sm",
+    "hover:shadow-md"
   ),
 
   danger: cn(
-    "bg-red-500/20",
-    "border border-red-500/30",
-    "text-red-300",
+    "bg-red-50",
+    "border border-red-200",
+    "text-red-600",
     "font-medium",
-    "rounded-2xl",
+    "rounded-lg",
     "backdrop-blur-sm",
     "transition-all duration-200",
-    "hover:bg-red-500/30 hover:text-red-200",
+    "hover:bg-red-100",
     "active:scale-95"
   ),
 };
 
 export const textStyles = {
-  eyebrow: cn("text-sm", "uppercase", "tracking-[0.2em]", "text-white/60", "font-medium"),
+  eyebrow: cn("text-xs", "uppercase", "tracking-[0.1em]", "text-slate-500", "font-semibold"),
 
-  heading: cn("text-white", "font-semibold"),
+  heading: cn("text-slate-900", "font-semibold"),
 
-  body: cn("text-white"),
+  body: cn("text-slate-700"),
 
-  bodySecondary: cn("text-white/80"),
+  bodySecondary: cn("text-slate-500"),
 
-  bodyMuted: cn("text-white/60"),
+  bodyMuted: cn("text-slate-400"),
 };
 
 export const purchaseBannerStyles = cn(
   "sticky top-0 z-50",
-  "bg-gradient-to-r from-emerald-500/30 via-emerald-400/20 to-cyan-500/20",
-  "border-b border-emerald-400/30",
-  "backdrop-blur-xl"
+  "bg-indigo-50/90",
+  "border-b border-indigo-100",
+  "backdrop-blur-xl",
+  "text-slate-900"
 );
 
 export function createGlassCard(
@@ -112,45 +151,45 @@ export function createText(variant: keyof typeof textStyles = "body", className?
 }
 
 export const navStyles = {
-  glass: cn("bg-white/5", "border-b border-white/10", "backdrop-blur-[40px]"),
+  glass: cn("bg-white/80", "border-b border-slate-200", "backdrop-blur-xl"),
 
-  floating: cn("bg-white/5", "border-r border-white/10", "backdrop-blur-[40px]"),
+  floating: cn("bg-white/80", "border-r border-slate-200", "backdrop-blur-xl"),
 };
 
 export const badgeStyles = {
   default: cn(
-    "bg-white/10",
-    "border border-white/20",
-    "text-white",
+    "bg-slate-100",
+    "border border-slate-200",
+    "text-slate-700",
     "rounded-full",
-    "px-3 py-1",
+    "px-2.5 py-0.5",
     "text-xs font-medium"
   ),
 
   success: cn(
-    "bg-emerald-500/20",
-    "border border-emerald-400/30",
-    "text-emerald-300",
+    "bg-emerald-50",
+    "border border-emerald-200",
+    "text-emerald-700",
     "rounded-full",
-    "px-3 py-1",
+    "px-2.5 py-0.5",
     "text-xs font-medium"
   ),
 
   warning: cn(
-    "bg-amber-500/20",
-    "border border-amber-400/30",
-    "text-amber-300",
+    "bg-amber-50",
+    "border border-amber-200",
+    "text-amber-700",
     "rounded-full",
-    "px-3 py-1",
+    "px-2.5 py-0.5",
     "text-xs font-medium"
   ),
 
   info: cn(
-    "bg-cyan-500/20",
-    "border border-cyan-400/30",
-    "text-cyan-300",
+    "bg-blue-50",
+    "border border-blue-200",
+    "text-blue-700",
     "rounded-full",
-    "px-3 py-1",
+    "px-2.5 py-0.5",
     "text-xs font-medium"
   ),
 };

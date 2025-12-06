@@ -12,11 +12,11 @@ export default function DesignSystemDemo() {
   const [selectValue, setSelectValue] = useState("option1");
 
   return (
-    <div className="min-h-screen text-white">
+    <div className="min-h-screen text-slate-900">
       <nav className={navStyles.glass}>
         <div className="container mx-auto flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-500">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600">
               <span className="font-bold text-white text-lg">N</span>
             </div>
             <h1 className="text-xl font-semibold">Design System Demo</h1>
@@ -32,13 +32,13 @@ export default function DesignSystemDemo() {
       <div className="container mx-auto p-6 lg:p-8 space-y-12">
         <div className="text-center py-12">
           <Text variant="eyebrow" className="mb-4">
-            DEEP OCEAN GLASSMORPHISM
+            PROFESSIONAL LIGHT GLASS
           </Text>
           <Text variant="heading" as="h1" className="text-5xl mb-4">
             Design System Showcase
           </Text>
           <Text variant="bodySecondary" className="text-lg max-w-2xl mx-auto">
-            A comprehensive collection of all components and styles in the Deep Ocean Glassmorphism
+            A comprehensive collection of all components and styles in the Professional Light Glass
             design system.
           </Text>
         </div>
@@ -239,13 +239,13 @@ export default function DesignSystemDemo() {
               onChange={(e) => setSelectValue(e.target.value)}
               helperText="Choose your preferred cloud provider"
             >
-              <option value="option1" className="bg-slate-800">
+              <option value="option1" className="bg-white">
                 AWS Bedrock
               </option>
-              <option value="option2" className="bg-slate-800">
+              <option value="option2" className="bg-white">
                 Crusoe Cloud
               </option>
-              <option value="option3" className="bg-slate-800">
+              <option value="option3" className="bg-white">
                 Google Cloud
               </option>
             </Select>

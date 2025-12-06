@@ -28,14 +28,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <QueryProvider>
-            <div className="ocean-background">
-              <div className="ambient-blob blob-1" />
-              <div className="ambient-blob blob-2" />
-              <div className="ambient-blob blob-3" />
-            </div>
-            {children}
-          </QueryProvider>
+          <QueryProvider>{children}</QueryProvider>
         </body>
       </html>
     </ClerkProvider>

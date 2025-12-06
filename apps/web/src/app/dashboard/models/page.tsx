@@ -83,73 +83,69 @@ export default function ModelsPage() {
         <h2 className={createText("eyebrow", "mb-2")}>INFRASTRUCTURE</h2>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className={createText("heading", "text-4xl mb-2")}>Managed Inference</h1>
-            <p className={createText("bodyMuted", "text-lg")}>
+            <h1 className={createText("heading", "text-2xl mb-2")}>Managed Inference</h1>
+            <p className={createText("bodyMuted", "text-sm")}>
               Manage your AI model deployments across providers
             </p>
           </div>
           <Button
             variant="primary"
             onClick={() => setShowDeployModal(true)}
-            className="flex items-center gap-2 px-6 py-3"
+            className="flex items-center gap-2 px-4 py-2 text-sm"
           >
-            <Plus size={18} />
+            <Plus size={16} />
             Deploy New Model
           </Button>
         </div>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className={createGlassCard("card", "overflow-hidden")}>
+        <div className="overflow-x-auto">
+          <table className="min-w-full">
+            <thead>
+              <tr className="border-b border-slate-200">
+                <th className={createText("eyebrow", "px-6 py-4 text-left text-xs")}>NAME</th>
+                <th className={createText("eyebrow", "px-6 py-4 text-left text-xs")}>PROVIDER</th>
+                <th className={createText("eyebrow", "px-6 py-4 text-left text-xs")}>MODEL ID</th>
+                <th className={createText("eyebrow", "px-6 py-4 text-left text-xs")}>CREATED</th>
+                <th className={createText("eyebrow", "px-6 py-4 text-left text-xs")}>STATUS</th>
+              </tr>
+            </thead>
+            <tbody>
         {models.map((model) => (
-          <div
+                <tr
             key={model.id}
-            className={createGlassCard(
-              "card",
-              "p-6 glass-reflection transition-all hover:scale-[1.02] cursor-pointer"
-            )}
+                  className="border-b border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer"
             onClick={() => setSelectedModel(model)}
           >
-            <div className="mb-4 flex items-center justify-between">
-              <h4 className={createText("heading", "text-lg")}>{model.name}</h4>
-              <span className={badgeStyles.success}>Active</span>
-            </div>
-            <div className="space-y-3 text-sm">
-              <div>
-                <span className={createText("bodyMuted", "text-xs uppercase tracking-wider")}>
-                  Provider
-                </span>
-                <p className={createText("body", "mt-1")}>{model.provider}</p>
-              </div>
-              <div>
-                <span className={createText("bodyMuted", "text-xs uppercase tracking-wider")}>
-                  Model ID
-                </span>
-                <p className={createText("body", "mt-1 font-mono text-xs break-all")}>
+                  <td className={createText("heading", "px-6 py-4 text-sm font-medium")}>
+                    {model.name}
+                  </td>
+                  <td className={createText("body", "px-6 py-4 text-sm capitalize")}>
+                    {model.provider}
+                  </td>
+                  <td className={createText("body", "px-6 py-4 text-sm font-mono")}>
                   {model.providerModelId}
-                </p>
-              </div>
-              <div>
-                <span className={createText("bodyMuted", "text-xs uppercase tracking-wider")}>
-                  Deployed
-                </span>
-                <p className={createText("body", "mt-1")}>
+                  </td>
+                  <td className={createText("bodySecondary", "px-6 py-4 text-sm")}>
                   {new Date(model.createdAt).toLocaleDateString()}
-                </p>
-              </div>
-            </div>
-          </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className={badgeStyles.success}>Active</span>
+                  </td>
+                </tr>
         ))}
         {models.length === 0 && (
-          <div
-            className={createGlassCard(
-              "card",
-              "col-span-full flex flex-col items-center justify-center py-16 border-2 border-dashed border-white/20"
-            )}
-          >
-            <Server size={56} className="mb-4 text-white/20" />
-            <p className={createText("bodyMuted")}>No models deployed yet.</p>
+                <tr>
+                  <td colSpan={5} className="px-6 py-16 text-center">
+                    <Server size={56} className="mx-auto mb-4 text-slate-300" />
+                    <p className={createText("bodyMuted")}>No models deployed yet.</p>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
           </div>
-        )}
       </div>
 
       <Modal isOpen={showDeployModal} onClose={() => setShowDeployModal(false)}>
@@ -164,10 +160,10 @@ export default function ModelsPage() {
               setNewModelName("");
             }}
           >
-            <option value="bedrock" className="bg-slate-800">
+            <option value="bedrock" className="bg-white">
               AWS Bedrock
             </option>
-            <option value="crusoe" className="bg-slate-800">
+            <option value="crusoe" className="bg-white">
               Crusoe Cloud
             </option>
           </Select>
@@ -178,19 +174,19 @@ export default function ModelsPage() {
             onChange={(e) => handleModelSelect(e.target.value)}
             required
           >
-            <option value="" className="bg-slate-800">
+            <option value="" className="bg-white">
               Select a model...
             </option>
             {catalog &&
               catalog[newModelProvider as keyof ModelCatalog]?.map((model) => (
-                <option key={model.id} value={model.id} className="bg-slate-800">
+                <option key={model.id} value={model.id} className="bg-white">
                   {model.name} - {model.provider} ({model.contextLength.toLocaleString()} tokens)
                 </option>
               ))}
           </Select>
 
           {newModelId && (
-            <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
               <p className={createText("bodyMuted", "text-xs mb-2")}>Model Details</p>
               <p className={createText("body", "text-sm")}>
                 {
@@ -267,7 +263,7 @@ export default function ModelsPage() {
               </div>
             </div>
 
-            <div className="border-t border-white/10 pt-6">
+            <div className="border-t border-slate-200 pt-6">
               <p className={createText("eyebrow", "text-xs mb-4")}>IMPLEMENTATION CODE</p>
 
               <CodeBlock
@@ -276,8 +272,8 @@ export default function ModelsPage() {
                 onLanguageChange={setSelectedLanguage}
               />
 
-              <div className="mt-6 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-                <p className={createText("body", "text-sm text-emerald-400")}>
+              <div className="mt-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200">
+                <p className={createText("body", "text-sm text-emerald-700")}>
                   <strong>Note:</strong> Replace YOUR_API_KEY with your actual API key. You can
                   create one in the API Keys section.
                 </p>

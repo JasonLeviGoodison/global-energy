@@ -35,3 +35,15 @@ export function useDeployModel() {
     },
   });
 }
+
+export function useDeleteModel() {
+  const apiClient = useApiClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (modelId: string) => apiClient.delete(`/models/${modelId}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["models"] });
+    },
+  });
+}

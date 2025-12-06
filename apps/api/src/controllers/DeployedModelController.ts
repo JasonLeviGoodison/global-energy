@@ -59,4 +59,27 @@ export class DeployedModelController {
       res.status(500).json({ error: "Failed to deploy model" });
     }
   };
+
+  delete = async (req: WithAuthProp<Request>, res: Response) => {
+    const userId = req.auth?.userId;
+    if (!userId) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    const { id } = req.params;
+
+    try {
+      const org = await this.orgService.getOrCreateByExternalUserId(userId);
+      const model = await this.service.findByIdOrName(org.id, id);
+
+      if (!model) {
+        return res.status(404).json({ error: "Model not found" });
+      }
+
+      await this.service.delete(model.id);
+      res.status(204).send();
+    } catch (e) {
+      console.error("Error deleting model:", e);
+      res.status(500).json({ error: "Failed to delete model" });
+    }
+  };
 }

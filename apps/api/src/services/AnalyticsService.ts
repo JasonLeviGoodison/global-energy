@@ -1,3 +1,4 @@
+import { OrganizationId, DeployedModelId } from "../db/schema";
 import { ApiUsageRepository, NewApiUsage } from "../repositories/ApiUsageRepository";
 import { DeployedModelRepository } from "../repositories/DeployedModelRepository";
 import type { AnalyticsResult, OverviewAnalytics, ModelAnalytics } from "../types/analytics";
@@ -10,11 +11,13 @@ export class AnalyticsService {
     return await this.usageRepo.create(data);
   }
 
-  async getAnalyticsByOrganization(organizationId: string): Promise<AnalyticsResult[]> {
+  async getAnalyticsByOrganization(organizationId: OrganizationId): Promise<AnalyticsResult[]> {
     const usage = await this.usageRepo.getUsageByOrganization(organizationId);
 
     const modelIds = usage.map((u) => u.deployedModelId);
-    const models = await Promise.all(modelIds.map((id) => this.modelRepo.findById(id)));
+    const models = await Promise.all(
+      modelIds.map((id) => this.modelRepo.findById(id as DeployedModelId))
+    );
 
     return usage.map((u) => {
       const model = models.find((m) => m?.id === u.deployedModelId);
@@ -28,7 +31,7 @@ export class AnalyticsService {
   }
 
   async getOverviewAnalytics(
-    organizationId: string,
+    organizationId: OrganizationId,
     days: number = 30
   ): Promise<OverviewAnalytics> {
     const startDate = new Date();
@@ -47,7 +50,7 @@ export class AnalyticsService {
     };
   }
 
-  async getModelAnalytics(modelId: string, days: number = 30): Promise<ModelAnalytics> {
+  async getModelAnalytics(modelId: DeployedModelId, days: number = 30): Promise<ModelAnalytics> {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - days);
 

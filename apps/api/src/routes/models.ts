@@ -8,5 +8,6 @@ const controller = new DeployedModelController();
 
 router.get("/", ClerkExpressWithAuth(), withClerkAuth(controller.getAll));
 router.post("/", ClerkExpressWithAuth(), withClerkAuth(controller.create));
+router.delete("/:id", ClerkExpressWithAuth(), withClerkAuth(controller.delete));
 
 export default router;

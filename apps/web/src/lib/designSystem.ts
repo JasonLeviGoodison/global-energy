@@ -63,6 +63,18 @@ export const buttonStyles = {
     "hover:from-emerald-500/80 hover:via-emerald-400/70 hover:to-cyan-500/70",
     "active:scale-95"
   ),
+
+  danger: cn(
+    "bg-red-500/20",
+    "border border-red-500/30",
+    "text-red-300",
+    "font-medium",
+    "rounded-2xl",
+    "backdrop-blur-sm",
+    "transition-all duration-200",
+    "hover:bg-red-500/30 hover:text-red-200",
+    "active:scale-95"
+  ),
 };
 
 export const textStyles = {

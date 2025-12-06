@@ -1,5 +1,5 @@
 import { BaseRepository } from "./BaseRepository";
-import { apiKeys } from "../db/schema";
+import { apiKeys, OrganizationId } from "../db/schema";
 import { db } from "../db";
 import { eq, desc } from "drizzle-orm";
 
@@ -18,7 +18,7 @@ export class ApiKeyRepository extends BaseRepository<typeof apiKeys> {
     });
   }
 
-  async findByOrganizationId(organizationId: string): Promise<ApiKey[]> {
+  async findByOrganizationId(organizationId: OrganizationId): Promise<ApiKey[]> {
     return await db.query.apiKeys.findMany({
       where: eq(apiKeys.organizationId, organizationId),
       orderBy: [desc(apiKeys.createdAt)],

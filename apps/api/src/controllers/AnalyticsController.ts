@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import type { WithAuthProp } from "@clerk/clerk-sdk-node";
 import { AnalyticsService } from "../services/AnalyticsService";
 import { OrganizationService } from "../services/OrganizationService";
+import { DeployedModelId } from "../db/schema";
 
 export class AnalyticsController {
   private service = new AnalyticsService();
@@ -53,7 +54,7 @@ export class AnalyticsController {
 
     try {
       const days = parseInt(req.query.days as string) || 30;
-      const analytics = await this.service.getModelAnalytics(modelId, days);
+      const analytics = await this.service.getModelAnalytics(modelId as DeployedModelId, days);
       res.json(analytics);
     } catch (e) {
       console.error(e);

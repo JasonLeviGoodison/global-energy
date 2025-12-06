@@ -1,17 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Server } from "lucide-react";
+import { Plus, Server, Trash2 } from "lucide-react";
 import { createButton, createText, createGlassCard, badgeStyles } from "@/lib/designSystem";
 import { generateCodeSnippet } from "@/lib/codeSnippets";
 import { Modal, Input, Select, Button, CodeBlock } from "@/components";
-import { useModels, useModelCatalog, useDeployModel } from "@/hooks";
+import { useModels, useModelCatalog, useDeployModel, useDeleteModel } from "@/hooks";
 import type { DeployedModel, ModelCatalog } from "@/types";
 
 export default function ModelsPage() {
   const { data: models = [], isLoading: modelsLoading } = useModels();
   const { data: catalog } = useModelCatalog();
   const deployModel = useDeployModel();
+  const deleteModel = useDeleteModel();
 
   const [showDeployModal, setShowDeployModal] = useState(false);
   const [selectedModel, setSelectedModel] = useState<DeployedModel | null>(null);
@@ -21,6 +22,7 @@ export default function ModelsPage() {
   const [newModelName, setNewModelName] = useState("");
   const [newModelProvider, setNewModelProvider] = useState("bedrock");
   const [newModelId, setNewModelId] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleModelSelect = (modelId: string) => {
     setNewModelId(modelId);
@@ -41,6 +43,23 @@ export default function ModelsPage() {
     setShowDeployModal(false);
     setNewModelName("");
     setNewModelId("");
+  };
+
+  const handleDelete = async () => {
+    if (!selectedModel) return;
+    if (!confirm("Are you sure you want to delete this model? This action cannot be undone."))
+      return;
+
+    setIsDeleting(true);
+    try {
+      await deleteModel.mutateAsync(selectedModel.id);
+      setSelectedModel(null);
+    } catch (error) {
+      console.error("Failed to delete model", error);
+      alert("Failed to delete model");
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const getCodeSnippet = (model: DeployedModel, language: "javascript" | "go" | "bash") => {
@@ -265,7 +284,22 @@ export default function ModelsPage() {
               </div>
             </div>
 
-            <div className="flex justify-end mt-8">
+            <div className="flex justify-between mt-8">
+              <Button
+                variant="danger"
+                onClick={handleDelete}
+                disabled={isDeleting}
+                className="px-6 py-3 flex items-center gap-2"
+              >
+                {isDeleting ? (
+                  "Deleting..."
+                ) : (
+                  <>
+                    <Trash2 size={18} />
+                    Delete Deployment
+                  </>
+                )}
+              </Button>
               <Button
                 variant="secondary"
                 onClick={() => {

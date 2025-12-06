@@ -1,3 +1,4 @@
+import { OrganizationId } from "../db/schema";
 import { OrganizationRepository, NewOrganization } from "../repositories/OrganizationRepository";
 
 export class OrganizationService {
@@ -16,7 +17,7 @@ export class OrganizationService {
     return org;
   }
 
-  async getById(id: string) {
+  async getById(id: OrganizationId) {
     return await this.repo.findById(id);
   }
 }

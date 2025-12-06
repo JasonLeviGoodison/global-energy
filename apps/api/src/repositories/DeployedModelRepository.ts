@@ -1,5 +1,5 @@
 import { BaseRepository } from "./BaseRepository";
-import { deployedModels } from "../db/schema";
+import { deployedModels, OrganizationId } from "../db/schema";
 import { db } from "../db";
 import { eq, desc, sql } from "drizzle-orm";
 
@@ -11,7 +11,7 @@ export class DeployedModelRepository extends BaseRepository<typeof deployedModel
     super(deployedModels);
   }
 
-  async findByOrganizationId(organizationId: string): Promise<DeployedModel[]> {
+  async findByOrganizationId(organizationId: OrganizationId): Promise<DeployedModel[]> {
     return await db.query.deployedModels.findMany({
       where: eq(deployedModels.organizationId, organizationId),
       orderBy: [desc(deployedModels.createdAt)],
@@ -19,7 +19,7 @@ export class DeployedModelRepository extends BaseRepository<typeof deployedModel
   }
 
   async findByIdOrName(
-    organizationId: string,
+    organizationId: OrganizationId,
     modelIdentifier: string
   ): Promise<DeployedModel | undefined> {
     return await db.query.deployedModels.findFirst({

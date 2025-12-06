@@ -1,5 +1,5 @@
 import { BaseRepository } from "./BaseRepository";
-import { apiUsage, deployedModels } from "../db/schema";
+import { apiUsage, DeployedModelId, deployedModels, OrganizationId } from "../db/schema";
 import { db } from "../db";
 import { eq, sql, and, gte, lte } from "drizzle-orm";
 import type { UsageStats, TimeSeriesData, OverviewStats } from "../types/analytics";
@@ -12,7 +12,7 @@ export class ApiUsageRepository extends BaseRepository<typeof apiUsage> {
     super(apiUsage);
   }
 
-  async getUsageByOrganization(organizationId: string): Promise<UsageStats[]> {
+  async getUsageByOrganization(organizationId: OrganizationId): Promise<UsageStats[]> {
     const usage = await db
       .select({
         deployedModelId: apiUsage.deployedModelId,
@@ -32,17 +32,17 @@ export class ApiUsageRepository extends BaseRepository<typeof apiUsage> {
   }
 
   async getOverviewStats(
-    organizationId: string,
+    organizationId: OrganizationId,
     startDate?: Date,
     endDate?: Date
   ): Promise<OverviewStats> {
     const conditions = [eq(deployedModels.organizationId, organizationId)];
 
     if (startDate) {
-      conditions.push(gte(apiUsage.timestamp, startDate));
+      conditions.push(gte(apiUsage.createdAt, startDate));
     }
     if (endDate) {
-      conditions.push(lte(apiUsage.timestamp, endDate));
+      conditions.push(lte(apiUsage.createdAt, endDate));
     }
 
     const result = await db
@@ -66,30 +66,30 @@ export class ApiUsageRepository extends BaseRepository<typeof apiUsage> {
   }
 
   async getTimeSeriesByOrganization(
-    organizationId: string,
+    organizationId: OrganizationId,
     startDate?: Date,
     endDate?: Date
   ): Promise<TimeSeriesData[]> {
     const conditions = [eq(deployedModels.organizationId, organizationId)];
 
     if (startDate) {
-      conditions.push(gte(apiUsage.timestamp, startDate));
+      conditions.push(gte(apiUsage.createdAt, startDate));
     }
     if (endDate) {
-      conditions.push(lte(apiUsage.timestamp, endDate));
+      conditions.push(lte(apiUsage.createdAt, endDate));
     }
 
     const timeSeries = await db
       .select({
-        date: sql<string>`DATE(${apiUsage.timestamp})`,
+        date: sql<string>`DATE(${apiUsage.createdAt})`,
         totalTokens: sql<number>`sum(${apiUsage.tokensUsed})`,
         totalRequests: sql<number>`count(${apiUsage.id})`,
       })
       .from(apiUsage)
       .innerJoin(deployedModels, eq(apiUsage.deployedModelId, deployedModels.id))
       .where(and(...conditions))
-      .groupBy(sql`DATE(${apiUsage.timestamp})`)
-      .orderBy(sql`DATE(${apiUsage.timestamp})`);
+      .groupBy(sql`DATE(${apiUsage.createdAt})`)
+      .orderBy(sql`DATE(${apiUsage.createdAt})`);
 
     return timeSeries.map((ts) => ({
       date: ts.date,
@@ -99,29 +99,29 @@ export class ApiUsageRepository extends BaseRepository<typeof apiUsage> {
   }
 
   async getTimeSeriesByModel(
-    deployedModelId: string,
+    deployedModelId: DeployedModelId,
     startDate?: Date,
     endDate?: Date
   ): Promise<TimeSeriesData[]> {
     const conditions = [eq(apiUsage.deployedModelId, deployedModelId)];
 
     if (startDate) {
-      conditions.push(gte(apiUsage.timestamp, startDate));
+      conditions.push(gte(apiUsage.createdAt, startDate));
     }
     if (endDate) {
-      conditions.push(lte(apiUsage.timestamp, endDate));
+      conditions.push(lte(apiUsage.createdAt, endDate));
     }
 
     const timeSeries = await db
       .select({
-        date: sql<string>`DATE(${apiUsage.timestamp})`,
+        date: sql<string>`DATE(${apiUsage.createdAt})`,
         totalTokens: sql<number>`sum(${apiUsage.tokensUsed})`,
         totalRequests: sql<number>`count(${apiUsage.id})`,
       })
       .from(apiUsage)
       .where(and(...conditions))
-      .groupBy(sql`DATE(${apiUsage.timestamp})`)
-      .orderBy(sql`DATE(${apiUsage.timestamp})`);
+      .groupBy(sql`DATE(${apiUsage.createdAt})`)
+      .orderBy(sql`DATE(${apiUsage.createdAt})`);
 
     return timeSeries.map((ts) => ({
       date: ts.date,

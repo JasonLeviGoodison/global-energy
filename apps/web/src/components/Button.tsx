@@ -3,7 +3,7 @@ import { createButton } from "@/lib/designSystem";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   children: ReactNode;
-  variant?: "primary" | "secondary" | "accent";
+  variant?: "primary" | "secondary" | "accent" | "danger";
   className?: string;
 };
 

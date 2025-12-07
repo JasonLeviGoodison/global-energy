@@ -112,12 +112,12 @@ export default function ModelsPage() {
               </tr>
             </thead>
             <tbody>
-        {models.map((model) => (
+              {models.map((model) => (
                 <tr
-            key={model.id}
+                  key={model.id}
                   className="border-b border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer"
-            onClick={() => setSelectedModel(model)}
-          >
+                  onClick={() => setSelectedModel(model)}
+                >
                   <td className={createText("heading", "px-6 py-4 text-sm font-medium")}>
                     {model.name}
                   </td>
@@ -125,17 +125,17 @@ export default function ModelsPage() {
                     {model.provider}
                   </td>
                   <td className={createText("body", "px-6 py-4 text-sm font-mono")}>
-                  {model.providerModelId}
+                    {model.providerModelId}
                   </td>
                   <td className={createText("bodySecondary", "px-6 py-4 text-sm")}>
-                  {new Date(model.createdAt).toLocaleDateString()}
+                    {new Date(model.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4">
                     <span className={badgeStyles.success}>Active</span>
                   </td>
                 </tr>
-        ))}
-        {models.length === 0 && (
+              ))}
+              {models.length === 0 && (
                 <tr>
                   <td colSpan={5} className="px-6 py-16 text-center">
                     <Server size={56} className="mx-auto mb-4 text-slate-300" />
@@ -145,7 +145,7 @@ export default function ModelsPage() {
               )}
             </tbody>
           </table>
-          </div>
+        </div>
       </div>
 
       <Modal isOpen={showDeployModal} onClose={() => setShowDeployModal(false)}>

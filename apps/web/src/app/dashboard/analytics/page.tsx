@@ -153,7 +153,11 @@ export default function AnalyticsPage() {
                 All Models
               </option>
               {overviewData.modelBreakdown.map((model) => (
-                <option key={model.modelId} value={model.modelId} className="bg-white text-slate-900">
+                <option
+                  key={model.modelId}
+                  value={model.modelId}
+                  className="bg-white text-slate-900"
+                >
                   {model.modelName}
                 </option>
               ))}

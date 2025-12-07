@@ -46,13 +46,9 @@ export default function InstancesPage() {
         >
           <Box size={56} className="mb-4 text-slate-300" />
           <p className={createText("heading", "mb-2")}>Coming Soon</p>
-          <p className={createText("bodyMuted")}>
-            One-off VM instances will be available soon.
-          </p>
+          <p className={createText("bodyMuted")}>One-off VM instances will be available soon.</p>
         </div>
       </div>
     </div>
   );
 }
-
-

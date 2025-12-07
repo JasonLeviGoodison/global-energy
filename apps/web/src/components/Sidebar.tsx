@@ -36,16 +36,20 @@ export function Sidebar({ children }: { children: ReactNode }) {
         initial={false}
         animate={{ width: isExpanded ? EXPANDED_WIDTH : COLLAPSED_WIDTH }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
-        className={navStyles.floating + " m-4 rounded-xl flex flex-col relative shadow-sm"}
+        className={navStyles.floating + " m-4 rounded-3xl flex flex-col relative"}
       >
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="absolute -right-3 top-6 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-white border border-slate-200 shadow-sm text-slate-500 hover:bg-slate-50 transition-colors"
+          className="absolute -right-3 top-6 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-white/10 border border-white/20 backdrop-blur-md hover:bg-white/20 transition-colors"
         >
-          {isExpanded ? <ChevronLeft size={14} /> : <ChevronRight size={14} />}
+          {isExpanded ? (
+            <ChevronLeft size={14} className="text-white" />
+          ) : (
+            <ChevronRight size={14} className="text-white" />
+          )}
         </button>
 
-        <div className="flex items-center gap-3 p-6 border-b border-slate-200/60">
+        <div className="flex items-center gap-3 p-6 border-b border-white/10">
           <AnimatePresence>
             {isExpanded && (
               <motion.span
@@ -75,7 +79,7 @@ export function Sidebar({ children }: { children: ReactNode }) {
           ))}
         </nav>
 
-        <div className="p-4 border-t border-slate-200/60">
+        <div className="p-4 border-t border-white/10">
           <AccountFooter isExpanded={isExpanded} />
         </div>
       </motion.aside>
@@ -100,17 +104,17 @@ function NavItem({
     <Link href={item.href}>
       <motion.div
         className={`
-          flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all
+          flex items-center gap-3 p-3 rounded-2xl cursor-pointer transition-all
           ${
             isActive
-              ? "bg-indigo-50 border border-indigo-100"
-              : "hover:bg-slate-50 border border-transparent"
+              ? "bg-white/15 border border-white/20"
+              : "hover:bg-white/10 border border-transparent"
           }
         `}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
       >
-        <Icon size={20} className={isActive ? "text-indigo-600" : "text-slate-400"} />
+        <Icon size={20} className={isActive ? "text-emerald-400" : "text-white/80"} />
         <AnimatePresence>
           {isExpanded && (
             <motion.span
@@ -120,7 +124,7 @@ function NavItem({
               transition={{ duration: 0.2 }}
               className={`
                 text-sm font-medium whitespace-nowrap overflow-hidden
-                ${isActive ? "text-indigo-900" : "text-slate-600"}
+                ${isActive ? "text-white" : "text-white/80"}
               `}
             >
               {item.title}
@@ -137,7 +141,7 @@ function AccountFooter({ isExpanded }: { isExpanded: boolean }) {
   const displayName = user?.firstName || user?.username || "User";
 
   return (
-    <div className="flex items-center gap-3 p-3 rounded-lg bg-slate-50 border border-slate-200">
+    <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/5 border border-white/10">
       <UserButton afterSignOutUrl="/" />
       <AnimatePresence>
         {isExpanded && (
@@ -148,8 +152,8 @@ function AccountFooter({ isExpanded }: { isExpanded: boolean }) {
             transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            <p className="text-sm text-slate-900 font-medium whitespace-nowrap">{displayName}</p>
-            <p className="text-xs text-slate-500 whitespace-nowrap">
+            <p className="text-sm text-white font-medium whitespace-nowrap">{displayName}</p>
+            <p className="text-xs text-white/60 whitespace-nowrap">
               {user?.primaryEmailAddress?.emailAddress}
             </p>
           </motion.div>

@@ -153,7 +153,7 @@ export function createText(variant: keyof typeof textStyles = "body", className?
 export const navStyles = {
   glass: cn("bg-white/80", "border-b border-slate-200", "backdrop-blur-xl"),
 
-  floating: cn("bg-white/80", "border-r border-slate-200", "backdrop-blur-xl"),
+  floating: cn("bg-slate-100", "border-r border-slate-200", "backdrop-blur-xl"),
 };
 
 export const badgeStyles = {
@@ -188,6 +188,24 @@ export const badgeStyles = {
     "bg-blue-50",
     "border border-blue-200",
     "text-blue-700",
+    "rounded-full",
+    "px-2.5 py-0.5",
+    "text-xs font-medium"
+  ),
+
+  danger: cn(
+    "bg-red-50",
+    "border border-red-200",
+    "text-red-700",
+    "rounded-full",
+    "px-2.5 py-0.5",
+    "text-xs font-medium"
+  ),
+
+  secondary: cn(
+    "bg-slate-50",
+    "border border-slate-200",
+    "text-slate-500",
     "rounded-full",
     "px-2.5 py-0.5",
     "text-xs font-medium"

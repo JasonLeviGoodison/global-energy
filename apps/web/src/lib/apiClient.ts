@@ -67,6 +67,25 @@ export class ApiClient {
   async delete<T = any>(path: string): Promise<T> {
     return this.fetchWithAuth(path, { method: "DELETE" });
   }
+
+  async getRaw(path: string): Promise<Response> {
+    const token = this.tokenGetter ? await this.tokenGetter() : null;
+
+    const headers: HeadersInit = {
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    };
+
+    const res = await fetch(`${API_BASE_URL}${path}`, {
+      method: "GET",
+      headers,
+    });
+
+    if (!res.ok) {
+      throw new Error(`Request failed with status ${res.status}`);
+    }
+
+    return res;
+  }
 }
 
 export const apiClient = new ApiClient();

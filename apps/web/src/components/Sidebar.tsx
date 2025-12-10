@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { UserButton, useUser } from "@clerk/nextjs";
-import { Server, Key, BarChart3, ChevronLeft, ChevronRight, Network, Box } from "lucide-react";
+import { Server, Key, BarChart3, ChevronLeft, ChevronRight, Network, Box, Container } from "lucide-react";
 import { navStyles, createText } from "@/lib/designSystem";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -17,6 +17,7 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { title: "Managed Inference", href: "/dashboard/models", icon: Server },
+  { title: "Kubernetes", href: "/dashboard/clusters", icon: Container },
   { title: "Orchestration", href: "/dashboard/orchestration", icon: Network },
   { title: "Instances", href: "/dashboard/instances", icon: Box },
   { title: "API Keys", href: "/dashboard/api-keys", icon: Key },
@@ -40,16 +41,16 @@ export function Sidebar({ children }: { children: ReactNode }) {
       >
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="absolute -right-3 top-6 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-white/10 border border-white/20 backdrop-blur-md hover:bg-white/20 transition-colors"
+          className="absolute -right-3 top-6 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-slate-200 border border-slate-300 backdrop-blur-md hover:bg-slate-300 transition-colors"
         >
           {isExpanded ? (
-            <ChevronLeft size={14} className="text-white" />
+            <ChevronLeft size={14} className="text-slate-600" />
           ) : (
-            <ChevronRight size={14} className="text-white" />
+            <ChevronRight size={14} className="text-slate-600" />
           )}
         </button>
 
-        <div className="flex items-center gap-3 p-6 border-b border-white/10">
+        <div className="flex items-center gap-3 p-6 border-b border-slate-200">
           <AnimatePresence>
             {isExpanded && (
               <motion.span
@@ -57,10 +58,7 @@ export function Sidebar({ children }: { children: ReactNode }) {
                 animate={{ opacity: 1, width: "auto" }}
                 exit={{ opacity: 0, width: 0 }}
                 transition={{ duration: 0.2 }}
-                className={createText(
-                  "heading",
-                  "text-base whitespace-nowrap overflow-hidden ml-2"
-                )}
+                className="text-base font-semibold text-slate-800 whitespace-nowrap overflow-hidden ml-2"
               >
                 General Compute
               </motion.span>
@@ -79,7 +77,7 @@ export function Sidebar({ children }: { children: ReactNode }) {
           ))}
         </nav>
 
-        <div className="p-4 border-t border-white/10">
+        <div className="p-4 border-t border-slate-200">
           <AccountFooter isExpanded={isExpanded} />
         </div>
       </motion.aside>
@@ -107,14 +105,14 @@ function NavItem({
           flex items-center gap-3 p-3 rounded-2xl cursor-pointer transition-all
           ${
             isActive
-              ? "bg-white/15 border border-white/20"
-              : "hover:bg-white/10 border border-transparent"
+              ? "bg-slate-200 border border-slate-300"
+              : "hover:bg-slate-200 border border-transparent"
           }
         `}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
       >
-        <Icon size={20} className={isActive ? "text-emerald-400" : "text-white/80"} />
+        <Icon size={20} className={isActive ? "text-indigo-600" : "text-slate-600"} />
         <AnimatePresence>
           {isExpanded && (
             <motion.span
@@ -124,7 +122,7 @@ function NavItem({
               transition={{ duration: 0.2 }}
               className={`
                 text-sm font-medium whitespace-nowrap overflow-hidden
-                ${isActive ? "text-white" : "text-white/80"}
+                ${isActive ? "text-slate-900" : "text-slate-600"}
               `}
             >
               {item.title}
@@ -141,7 +139,7 @@ function AccountFooter({ isExpanded }: { isExpanded: boolean }) {
   const displayName = user?.firstName || user?.username || "User";
 
   return (
-    <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/5 border border-white/10">
+    <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-200 border border-slate-300">
       <UserButton afterSignOutUrl="/" />
       <AnimatePresence>
         {isExpanded && (
@@ -152,8 +150,8 @@ function AccountFooter({ isExpanded }: { isExpanded: boolean }) {
             transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            <p className="text-sm text-white font-medium whitespace-nowrap">{displayName}</p>
-            <p className="text-xs text-white/60 whitespace-nowrap">
+            <p className="text-sm text-slate-800 font-medium whitespace-nowrap">{displayName}</p>
+            <p className="text-xs text-slate-500 whitespace-nowrap">
               {user?.primaryEmailAddress?.emailAddress}
             </p>
           </motion.div>
